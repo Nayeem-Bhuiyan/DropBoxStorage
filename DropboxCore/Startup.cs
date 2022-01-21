@@ -1,4 +1,5 @@
 using DropboxCore.Data;
+using DropboxCore.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -29,7 +30,7 @@ namespace DropboxCore
             services.AddControllersWithViews();
             #region App Database Settings
             services.AddDbContext<AppDbContext>(options =>options.UseSqlServer(Configuration.GetConnectionString("AppDbConnection")));
-            #region
+            #endregion
             #region Areas Config
             services.Configure<RazorViewEngineOptions>(options =>
             {
@@ -41,9 +42,11 @@ namespace DropboxCore
 
             });
             #endregion
+            services.AddSingleton<IConfiguration>(Configuration);
             #region DropboxManager
-            //services.AddScoped<IDropboxManager, DropboxManager>();
+            services.AddScoped<IDropboxManager, DropboxManager>();
             #endregion
+
             services.AddMvc(options =>
             {
                 options.EnableEndpointRouting = false;
