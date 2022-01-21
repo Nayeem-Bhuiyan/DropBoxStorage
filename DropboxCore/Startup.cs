@@ -69,11 +69,9 @@ namespace DropboxCore
             }
             app.UseHttpsRedirection();
             app.UseStaticFiles();
-
+            app.UseDefaultFiles();
             app.UseRouting();
-
             app.UseAuthorization();
-
             app.UseMvc(routes => {
                 routes.MapRoute(
                 name: "DropBox",

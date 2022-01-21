@@ -10,13 +10,16 @@ namespace DropboxCore.Data
 {
     public class AppDbContext : DbContext
     {
-        private readonly IHttpContextAccessor _httpContextAccessor;
+        //private readonly IHttpContextAccessor _httpContextAccessor;
 
-        public AppDbContext(DbContextOptions<AppDbContext> options, IHttpContextAccessor _httpContextAccessor) : base(options)
+        //public AppDbContext(DbContextOptions<AppDbContext> options, IHttpContextAccessor _httpContextAccessor) : base(options)
+        //{
+        //    this._httpContextAccessor = _httpContextAccessor;
+        //}
+        public AppDbContext(DbContextOptions<AppDbContext> options) : base(options)
         {
-            this._httpContextAccessor = _httpContextAccessor;
+           
         }
-
         public DbSet<FolderUploadInfo> folderUploadInfos { get; set; }
 
     }

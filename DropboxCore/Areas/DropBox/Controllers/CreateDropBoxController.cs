@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 
 namespace DropboxCore.Areas.DropBox.Controllers
 {
+    [Area("DropBox")]
     public class CreateDropBoxController : Controller
     {
         public IActionResult Index()
