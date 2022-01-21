@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using DropboxCore.Data.Entity.Product;
+using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -16,7 +17,7 @@ namespace DropboxCore.Data
             this._httpContextAccessor = _httpContextAccessor;
         }
 
-        //public DbSet<Product> Products { get; set; }
+        public DbSet<FolderUploadInfo> folderUploadInfos { get; set; }
 
     }
 }

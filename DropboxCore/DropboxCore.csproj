@@ -20,7 +20,6 @@
     <Folder Include="Areas\DropBox\Data\" />
     <Folder Include="Areas\DropBox\Models\" />
     <Folder Include="Areas\DropBox\Views\" />
-    <Folder Include="Data\Entity\Product\" />
     <Folder Include="Helper\" />
   </ItemGroup>
 

@@ -8,5 +8,6 @@ namespace DropboxCore.Data.Entity
     public class Base
     {
         public int Id { get; set; }
+        public DateTime? createdAt { get; set; }
     }
 }
