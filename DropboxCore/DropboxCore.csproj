@@ -18,7 +18,6 @@
 
   <ItemGroup>
     <Folder Include="Areas\DropBox\Models\" />
-    <Folder Include="Areas\DropBox\Views\" />
     <Folder Include="Helper\" />
   </ItemGroup>
 
