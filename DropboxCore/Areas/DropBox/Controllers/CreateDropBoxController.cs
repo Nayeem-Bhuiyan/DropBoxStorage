@@ -38,12 +38,12 @@ namespace DropboxCore.Areas.DropBox.Controllers
                 if (response== "success")
                 {
                     model.message = "Successfully Folder Created";
-                    model.FolderLink = dropboxFolderPath;
+                    model.FolderLink = "https://www.dropbox.com/home"+ dropboxFolderPath;
                 }
                 else
                 {
                     model.message = "Duplicate Folder Found";
-                    model.FolderLink = dropboxFolderPath;
+                    model.FolderLink = "https://www.dropbox.com/home" + dropboxFolderPath;
                 }
             }
             catch (Exception ex)
