@@ -31,7 +31,7 @@ namespace DropboxCore.Areas.DropBox.Controllers
         public async Task<IActionResult> CreateFolder(CreateDropBoxViewModel model)
         {
 
-           await _dropBoxService.CreateFolder(model.FolderName);
+           await _dropBoxService.CreateFolder("/"+model.FolderName+DateTime.Now.ToString("dd-MM-yyyy"));
             return View();
         }
 
