@@ -43,7 +43,7 @@ namespace DropboxCore.Services
         /// <param name="svcUri">Dropbox folder URI</param>
         /// <returns>Metadata for the created folder</returns>
         Task<dropboxApi.Files.CreateFolderResult> CreateFolder(string svcUri);
-
+        Task<string> CreateFolder1(string svcUri);
         /// <summary>
         /// Deletes file or folder by the specified Dropbox URI.
         /// </summary>

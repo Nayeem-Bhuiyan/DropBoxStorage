@@ -32,22 +32,24 @@ namespace DropboxCore.Areas.DropBox.Controllers
         {
             try
             {
-                dropboxApi.Files.CreateFolderResult response =await _dropBoxService.CreateFolder("/" + model.FolderName+ DateTime.Now.ToString("dd-MM-yyyy"));
-                if (response!=null)
+
+                string dropboxFolderPath = "/" + model.FolderName+"-" + DateTime.Now.ToString("dd-MM-yyyy");
+                string response =await _dropBoxService.CreateFolder1(dropboxFolderPath);
+                if (response== "success")
                 {
                     model.message = "Successfully Folder Created";
-                    model.FolderLink = "https://www.dropbox.com/home/" + model.FolderName + DateTime.Now.ToString("dd-MM-yyyy");
+                    model.FolderLink = dropboxFolderPath;
                 }
                 else
                 {
                     model.message = "Duplicate Folder Found";
-                    model.FolderLink = "https://www.dropbox.com/home/" + model.FolderName + DateTime.Now.ToString("dd-MM-yyyy");
-
+                    model.FolderLink = dropboxFolderPath;
                 }
             }
             catch (Exception ex)
             {
                 model.message = ex.Message;
+                model.FolderLink ="";
                 throw;
             }
             

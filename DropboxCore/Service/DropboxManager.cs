@@ -152,14 +152,17 @@ namespace DropboxCore.Services
         /// <returns>Metadata for the created folder</returns>
         public async Task<dropboxApi.Files.CreateFolderResult> CreateFolder(string svcUri)
         {
+
+            dropboxApi.Files.CreateFolderResult result = null;
             try
             {
                 string AccessToken = _IConfiguration.GetSection("DropBoxAccessToken").Value;
-                dropboxApi.Files.CreateFolderResult result = null;
+               
 
                 using (var client = new dropboxApi.DropboxClient(AccessToken))
                 {
                     result = await client.Files.CreateFolderV2Async(svcUri);
+
                 }
 
                 return result;
@@ -170,7 +173,36 @@ namespace DropboxCore.Services
                 return null;
             }
         }
+        public async Task<string> CreateFolder1(string svcUri)
+        {
 
+            string responseMessage = null;
+            try
+            {
+                dropboxApi.Files.CreateFolderResult result = null;
+                string AccessToken = _IConfiguration.GetSection("DropBoxAccessToken").Value;
+                
+
+                using (var client = new dropboxApi.DropboxClient(AccessToken))
+                {
+                    result = await client.Files.CreateFolderV2Async(svcUri);
+                    if (result.Metadata.Name != null)
+                    {
+                        responseMessage = "success";
+                    }
+                }
+
+                return responseMessage;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+
+                responseMessage = ex.Message;
+
+                return responseMessage;
+            }
+        }
         /// <summary>
         /// Deletes file or folder by the specified Dropbox URI.
         /// </summary>
