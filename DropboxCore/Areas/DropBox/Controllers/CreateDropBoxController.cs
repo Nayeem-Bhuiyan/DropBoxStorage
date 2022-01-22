@@ -49,7 +49,6 @@ namespace DropboxCore.Areas.DropBox.Controllers
             catch (Exception ex)
             {
                 model.message = ex.Message;
-                model.FolderLink ="";
                 throw;
             }
             
