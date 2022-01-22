@@ -64,6 +64,7 @@ namespace DropboxCore.Areas.DropBox.Controllers
             try
             {
                 string response = null;
+            
                 response = await _dropBoxService.DownloadFile1(model.dropboxFolderPath, model.localFolderPath);
 
                 model.message = response;
@@ -78,39 +79,57 @@ namespace DropboxCore.Areas.DropBox.Controllers
         }
 
 
+        //public async Task<List<string>> GetFiles()
+        //{
+        //    var dbx = new DropboxClient("ddnqP8VkuRIAAAAAAAAAAbakpkt52c-Nr4oznaXrc368Z2HxMu5Nhb_GQeFAJM26");
+        //    var list = await dbx.Files.ListFolderAsync("/Upload-22-01-2022/");
+        //    List<string> FilePaths = new List<string>();
+        //    foreach (var file in list.Entries.Where(i => i.IsFile))
+        //    {
+        //        FilePaths.Add(file.AsFile.PathLower);
+        //    }
+        //    return FilePaths;
+        //}
+        //public async Task<FileResult> Download()
+        //{
 
-        public FileResult Download([FromBody] List<string> paths)
-        {
-            
-            
-            
-            byte[] fileBytes = null;
-            string path = paths.FirstOrDefault();
-            int index = path.LastIndexOf('/');
-            string fileName = path.Substring(index + 1);
+        //    var dbx = new DropboxClient("ddnqP8VkuRIAAAAAAAAAAbakpkt52c-Nr4oznaXrc368Z2HxMu5Nhb_GQeFAJM26");
+        //    var list = await dbx.Files.ListFolderAsync("/Upload-22-01-2022/");
+        //    List<string> paths = new List<string>();
+        //    foreach (var file in list.Entries.Where(i => i.IsFile))
+        //    {
+        //        paths.Add(file.AsFile.PathLower);
+        //    }
 
-            using (var dbx = new DropboxClient("ddnqP8VkuRIAAAAAAAAAAbakpkt52c-Nr4oznaXrc368Z2HxMu5Nhb_GQeFAJM26"))
-            {
-                using (var response = dbx.Files.DownloadAsync(path).Result)
-                {
-                    fileBytes = response.GetContentAsByteArrayAsync().Result;
-                }
-            }
 
-            if (fileBytes == null)
-            {
-                return null;
-            }
+        //    byte[] fileBytes = null;
+        //    string path = paths.FirstOrDefault();
+        //    int index = path.LastIndexOf('/');
+        //    string fileName = path.Substring(index + 1);
 
-            var contentDispositionHeader = new System.Net.Mime.ContentDisposition
-            {
-                Inline = false,
-                FileName = fileName
-            };
+        //    using (var dbx1 = new DropboxClient("ddnqP8VkuRIAAAAAAAAAAbakpkt52c-Nr4oznaXrc368Z2HxMu5Nhb_GQeFAJM26"))
+        //    {
+              
+        //        using (var response = dbx1.Files.DownloadAsync(path).Result)
+        //        {
+        //            fileBytes = response.GetContentAsByteArrayAsync().Result;
+        //        }
+        //    }
 
-            Response.Headers.Add("Content-Disposition", contentDispositionHeader.ToString());
-            return File(fileBytes, System.Net.Mime.MediaTypeNames.Application.Octet);
-        }
+        //    if (fileBytes == null)
+        //    {
+        //        return null;
+        //    }
+
+        //    var contentDispositionHeader = new System.Net.Mime.ContentDisposition
+        //    {
+        //        Inline = false,
+        //        FileName = fileName
+        //    };
+
+        //    Response.Headers.Add("Content-Disposition", contentDispositionHeader.ToString());
+        //    return File(fileBytes, System.Net.Mime.MediaTypeNames.Application.Octet);
+        //}
 
 
     }
