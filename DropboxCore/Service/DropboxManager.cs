@@ -183,7 +183,7 @@ namespace DropboxCore.Services
 
         #endregion
 
-        #region EditFileOrFolder
+        #region EditSection
         /// <summary>
         /// Renames file or folder.
         /// </summary>
