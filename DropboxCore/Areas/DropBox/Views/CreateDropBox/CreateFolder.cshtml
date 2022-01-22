@@ -20,7 +20,7 @@
             @if (Model.message == "Successfully Folder Created")
             {
                 <div class="card-footer bg-success text-white">
-                    <h5> @Model.message</h5><a href="@Model.FolderLink" class="btn btn-primary" target="_blank">Go</a>
+                    @Model.message <a href="@Model.FolderLink" class="btn btn-primary ml-5" target="_blank">Go</a>
                 </div>
             }
             else if (Model.message == null)
@@ -31,9 +31,9 @@
             }
             else
             {
-                <div class="card-footer bg-danger text-white">
-                    <h5> @Model.message</h5><a href="@Model.FolderLink" class="btn btn-primary" target="_blank">Go</a>
-                </div>
+        <div class="card-footer bg-danger text-white">
+            @Model.message <a href="@Model.FolderLink" class="btn btn-primary ml-5" target="_blank">Go</a>
+        </div>
             }
 
         </div>
