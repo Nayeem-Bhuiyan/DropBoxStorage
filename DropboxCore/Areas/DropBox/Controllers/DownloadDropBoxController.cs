@@ -1,4 +1,5 @@
-﻿using DropboxCore.Areas.DropBox.Models;
+﻿using Dropbox.Api;
+using DropboxCore.Areas.DropBox.Models;
 using DropboxCore.Services;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -18,7 +19,7 @@ namespace DropboxCore.Areas.DropBox.Controllers
         {
             _dropBoxService = dropBoxService;
         }
-       [HttpGet]
+        [HttpGet]
         public IActionResult DownloadZip()
         {
             DownloadDropBoxViewModel model = new DownloadDropBoxViewModel();
@@ -29,46 +30,52 @@ namespace DropboxCore.Areas.DropBox.Controllers
         {
             try
             {
-                string response = null;
-                //await _dropBoxService.DownloadFolder(model.dropboxFolderPath, model.localFolderPath);
-                response = await _dropBoxService.DownloadFile1(model.dropboxFolderPath, model.localFolderPath);
-                model.message = response;
-           
+                bool response = false;
+                response = await _dropBoxService.DownloadFolder(model.dropboxFolderPath, model.localFolderPath);
+                if (response)
+                {
+                    model.message = "Success";
+                }
+                else
+                {
+                    model.message = "Error";
+                }
             }
             catch (Exception ex)
             {
-                //model.message = ex.Message;
+                model.message = ex.Message;
                 throw;
             }
             return View(model);
         }
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
         [HttpGet]
         public IActionResult DownloadFiles()
         {
-           
-            return View();
+            DownloadDropBoxViewModel model = new DownloadDropBoxViewModel();
+            return View(model);
         }
 
 
+        [HttpPost]
+        public async Task<IActionResult> DownloadFiles(DownloadDropBoxViewModel model)
+        {
+            try
+            {
+                string response = null;
+                response = await _dropBoxService.DownloadFile1(model.dropboxFolderPath, model.localFolderPath);
 
+                model.message = response;
+
+            }
+            catch (Exception ex)
+            {
+
+                throw;
+            }
+            return View(model);
+        }
 
     }
 }
