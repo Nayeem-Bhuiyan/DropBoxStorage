@@ -9,6 +9,7 @@ using System.Net;
 using System.Xml;
 using dropboxApi = global::Dropbox.Api;
 using Microsoft.Extensions.Configuration;
+using Dropbox.Api.Files;
 
 namespace DropboxCore.Services
 {
@@ -104,7 +105,7 @@ namespace DropboxCore.Services
             try
             {
                 string AccessToken = _IConfiguration.GetSection("DropBoxAccessToken").Value;
-               
+
 
                 using (var client = new dropboxApi.DropboxClient(AccessToken))
                 {
@@ -128,7 +129,7 @@ namespace DropboxCore.Services
             {
                 dropboxApi.Files.CreateFolderResult result = null;
                 string AccessToken = _IConfiguration.GetSection("DropBoxAccessToken").Value;
-                
+
 
                 using (var client = new dropboxApi.DropboxClient(AccessToken))
                 {
@@ -256,6 +257,55 @@ namespace DropboxCore.Services
                     }
                 }
 
+                return uploadResults;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                return null;
+            }
+        }
+        public async Task<dropboxApi.Files.FileMetadata> UploadMultipleFiles(string DropBoxFolderPath, string LocalSourcePath)
+        {
+            string AccessToken = _IConfiguration.GetSection("DropBoxAccessToken").Value;
+            var uploadResults = new dropboxApi.Files.FileMetadata();
+            var client = new dropboxApi.DropboxClient(AccessToken);
+            try
+            {
+                    const int chunkSize = 1024 * 1024 * 10;
+                    using (FileStream stream = File.OpenRead(LocalSourcePath))
+                    {
+                        int numChunks = (int)Math.Ceiling((double)stream.Length / chunkSize);
+                        byte[] buffer = new byte[chunkSize];
+                        string sessionId = null;
+                        for (int idx = 0; idx < numChunks; idx++)
+                        {
+                            Console.WriteLine($"{DateTime.Now} Start uploading chunk {idx}");
+                            int byteRead = stream.Read(buffer, 0, chunkSize);
+                            using (MemoryStream memStream = new MemoryStream(buffer, 0, byteRead))
+                            {
+                                if (idx == 0)
+                                {
+                                    UploadSessionStartResult result = await client.Files.UploadSessionStartAsync(body: memStream);
+                                    sessionId = result.SessionId;
+                                }
+                                else
+                                {
+                                    UploadSessionCursor cursor = new UploadSessionCursor(sessionId, (ulong)(chunkSize * idx));
+
+                                    if (idx == numChunks - 1)
+                                    {
+                                        await client.Files.UploadSessionFinishAsync(cursor, new CommitInfo(DropBoxFolderPath, WriteMode.Overwrite.Instance), memStream);
+                                    }
+                                    else
+                                    {
+                                        await client.Files.UploadSessionAppendV2Async(cursor, body: memStream);
+                                    }
+                                }
+                            }
+                        }
+                    
+                }
                 return uploadResults;
             }
             catch (Exception ex)

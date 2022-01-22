@@ -17,7 +17,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Areas\DropBox\Models\" />
     <Folder Include="Helper\" />
     <Folder Include="wwwroot\Download\" />
   </ItemGroup>

@@ -77,5 +77,41 @@ namespace DropboxCore.Areas.DropBox.Controllers
             return View(model);
         }
 
+
+
+        public FileResult Download([FromBody] List<string> paths)
+        {
+            
+            
+            
+            byte[] fileBytes = null;
+            string path = paths.FirstOrDefault();
+            int index = path.LastIndexOf('/');
+            string fileName = path.Substring(index + 1);
+
+            using (var dbx = new DropboxClient("ddnqP8VkuRIAAAAAAAAAAbakpkt52c-Nr4oznaXrc368Z2HxMu5Nhb_GQeFAJM26"))
+            {
+                using (var response = dbx.Files.DownloadAsync(path).Result)
+                {
+                    fileBytes = response.GetContentAsByteArrayAsync().Result;
+                }
+            }
+
+            if (fileBytes == null)
+            {
+                return null;
+            }
+
+            var contentDispositionHeader = new System.Net.Mime.ContentDisposition
+            {
+                Inline = false,
+                FileName = fileName
+            };
+
+            Response.Headers.Add("Content-Disposition", contentDispositionHeader.ToString());
+            return File(fileBytes, System.Net.Mime.MediaTypeNames.Application.Octet);
+        }
+
+
     }
 }

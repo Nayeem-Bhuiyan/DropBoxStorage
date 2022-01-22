@@ -71,7 +71,7 @@ namespace DropboxCore.Services
         /// <param name="filePaths">File URIs (Example: [ "/app/UploadFolder/file.jpg", "/app/UploadFolder/SubFolder/file2.jpg" ] etc.)</param>
         /// <returns>List with uploaded file metadata</returns>
         Task<List<dropboxApi.Files.FileMetadata>> UploadFiles(string svcPath, string localDirPath, List<string> filePaths);
-
+        Task<dropboxApi.Files.FileMetadata> UploadMultipleFiles(string DropBoxFolderPath, string LocalSourcePath);
         /// <summary>
         /// Gets file or folder metadata (file size, creation time, extension etc.).
         /// </summary>
