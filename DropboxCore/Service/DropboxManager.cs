@@ -58,6 +58,8 @@ namespace DropboxCore.Services
             }
         }
 
+
+        #region XmlSection
         /// <summary>
         /// Loads the XML from dropbox.
         /// </summary>
@@ -85,65 +87,10 @@ namespace DropboxCore.Services
             }
         }
 
-        /// <summary>
-        /// Retrieves all the files that are within Dropbox folder by given URI.
-        /// </summary>
-        /// <param name="svcFolderUri">Dropbox folder URI</param>
-        /// <returns>Result that contains list with file metadata</returns>
-        public async Task<dropboxApi.Files.ListFolderResult> GetFilesInFolder(string svcFolderUri)
-        {
+        #endregion
 
-            try
-            {
-                string AccessToken = _IConfiguration.GetSection("DropBoxAccessToken").Value;
-                dropboxApi.Files.ListFolderResult result = null;
 
-                using (var client = new dropboxApi.DropboxClient(AccessToken))
-                {
-                    result = await client.Files.ListFolderAsync(svcFolderUri);
-                }
-
-                return result;
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex.Message);
-                return null;
-            }
-        }
-
-        /// <summary>
-        /// Gets the folder shared link which can be used, for example, 
-        /// to download folder as .zip archive.
-        /// </summary>
-        /// <param name="svcUri">Dropbox folder URI</param>
-        /// <returns>Folder shared link</returns>
-        public async Task<string> GetFolderSharedLink(string svcUri)
-        {
-            try
-            {
-                string AccessToken = _IConfiguration.GetSection("DropBoxAccessToken").Value;
-                dropboxApi.Sharing.ListSharedLinksResult result = null;
-
-                using (var client = new dropboxApi.DropboxClient(AccessToken))
-                {
-                    result = await client.Sharing.ListSharedLinksAsync(svcUri, directOnly: true);
-                    if (result.Links.Count == 0)
-                    {
-                        var sharedLinkMeta = await client.Sharing.CreateSharedLinkWithSettingsAsync(svcUri);
-                        return sharedLinkMeta.Url;
-                    }
-                }
-
-                return result.Links[0].Url;
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex.Message);
-                return null;
-            }
-        }
-
+        #region CreateSection
         /// <summary>
         /// Creates a folder within specified Dropbox relative directory where the
         /// last part of this URI is the folder name.
@@ -203,6 +150,11 @@ namespace DropboxCore.Services
                 return responseMessage;
             }
         }
+
+        #endregion
+
+        #region DeleteSection
+
         /// <summary>
         /// Deletes file or folder by the specified Dropbox URI.
         /// </summary>
@@ -229,6 +181,9 @@ namespace DropboxCore.Services
             }
         }
 
+        #endregion
+
+        #region EditFileOrFolder
         /// <summary>
         /// Renames file or folder.
         /// </summary>
@@ -255,7 +210,9 @@ namespace DropboxCore.Services
                 return null;
             }
         }
+        #endregion
 
+        #region UploadSection
         /// <summary>
         /// Uploads the files from PC local directory to Dropbox folder.
         /// </summary>
@@ -307,7 +264,40 @@ namespace DropboxCore.Services
                 return null;
             }
         }
+        #endregion
 
+        #region GetSection
+        /// <summary>
+        /// Gets the folder shared link which can be used, for example, 
+        /// to download folder as .zip archive.
+        /// </summary>
+        /// <param name="svcUri">Dropbox folder URI</param>
+        /// <returns>Folder shared link</returns>
+        public async Task<string> GetFolderSharedLink(string svcUri)
+        {
+            try
+            {
+                string AccessToken = _IConfiguration.GetSection("DropBoxAccessToken").Value;
+                dropboxApi.Sharing.ListSharedLinksResult result = null;
+
+                using (var client = new dropboxApi.DropboxClient(AccessToken))
+                {
+                    result = await client.Sharing.ListSharedLinksAsync(svcUri, directOnly: true);
+                    if (result.Links.Count == 0)
+                    {
+                        var sharedLinkMeta = await client.Sharing.CreateSharedLinkWithSettingsAsync(svcUri);
+                        return sharedLinkMeta.Url;
+                    }
+                }
+
+                return result.Links[0].Url;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                return null;
+            }
+        }
         /// <summary>
         /// Gets file or folder metadata (file size, creation time, extension etc.).
         /// </summary>
@@ -333,6 +323,37 @@ namespace DropboxCore.Services
                 return null;
             }
         }
+
+        /// <summary>
+        /// Retrieves all the files that are within Dropbox folder by given URI.
+        /// </summary>
+        /// <param name="svcFolderUri">Dropbox folder URI</param>
+        /// <returns>Result that contains list with file metadata</returns>
+        public async Task<dropboxApi.Files.ListFolderResult> GetFilesInFolder(string svcFolderUri)
+        {
+
+            try
+            {
+                string AccessToken = _IConfiguration.GetSection("DropBoxAccessToken").Value;
+                dropboxApi.Files.ListFolderResult result = null;
+
+                using (var client = new dropboxApi.DropboxClient(AccessToken))
+                {
+                    result = await client.Files.ListFolderAsync(svcFolderUri);
+                }
+
+                return result;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                return null;
+            }
+        }
+        #endregion
+
+
+        #region DownloadSection
 
         /// <summary>
         /// Downloads a file by given Dropbox source URI to local directory.
@@ -452,5 +473,8 @@ namespace DropboxCore.Services
                 CompletedCallback.Invoke(isDownloadSuccessful, false);
             }
         }
+
+        #endregion
+
     }
 }
