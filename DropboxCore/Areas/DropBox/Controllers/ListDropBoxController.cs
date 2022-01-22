@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using DropboxCore.Services;
+using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,6 +9,13 @@ namespace DropboxCore.Areas.DropBox.Controllers
 {
     public class ListDropBoxController : Controller
     {
+
+        private IDropboxManager _dropBoxService;
+
+        public ListDropBoxController(IDropboxManager dropBoxService)
+        {
+            _dropBoxService = dropBoxService;
+        }
         public IActionResult Index()
         {
             return View();
