@@ -363,7 +363,29 @@ namespace DropboxCore.Services
                 return false;
             }
         }
+        public async Task<string> DownloadFile1(string svcFileUri, string localFilePath)
+        {
+            try
+            {
+                string AccessToken = _IConfiguration.GetSection("DropBoxAccessToken").Value;
+                using (var client = new dropboxApi.DropboxClient(AccessToken))
+                {
+                    var result = await client.Files.DownloadAsync(svcFileUri);
+                    using (Stream sourceStream = await result.GetContentAsStreamAsync())
+                    using (FileStream source = File.Open(localFilePath, FileMode.Create))
+                    {
+                        await sourceStream.CopyToAsync(source);
+                    }
+                }
 
+                return "Successfully Download";
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                return ex.Message;
+            }
+        }
         /// <summary>
         /// Downloads a folder as a .zip archive.
         /// </summary>

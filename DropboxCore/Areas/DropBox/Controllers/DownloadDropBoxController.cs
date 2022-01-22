@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 
 namespace DropboxCore.Areas.DropBox.Controllers
 {
+    [Area("DropBox")]
     public class DownloadDropBoxController : Controller
     {
 
@@ -24,11 +25,40 @@ namespace DropboxCore.Areas.DropBox.Controllers
             return View(model);
         }
         [HttpPost]
-        public IActionResult DownloadZip(DownloadDropBoxViewModel model)
+        public async Task<IActionResult> DownloadZip(DownloadDropBoxViewModel model)
         {
-            
+            try
+            {
+                string response = null;
+                //await _dropBoxService.DownloadFolder(model.dropboxFolderPath, model.localFolderPath);
+                response = await _dropBoxService.DownloadFile1(model.dropboxFolderPath, model.localFolderPath);
+                model.message = response;
+           
+            }
+            catch (Exception ex)
+            {
+                //model.message = ex.Message;
+                throw;
+            }
             return View(model);
         }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
         [HttpGet]
         public IActionResult DownloadFiles()

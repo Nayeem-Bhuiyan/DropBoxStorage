@@ -4,5 +4,25 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h1>DownloadZip</h1>
+
+<div class="row">
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header bg-success text-white">
+                Download Folder(Zip)
+            </div>
+            <div class="card-body">
+                <form asp-area="DropBox" asp-controller="DownloadDropBox" asp-action="DownloadZip" method="post">
+                    <input type="text" name="dropboxFolderPath" id="dropboxFolderPath" value="/IngenStudioAppFolder" class="form-control" required />
+                    <input type="text" name="localFolderPath" id="localFolderPath" value="D:\ExceedSystemTest\DropBoxStorage\DropboxCore\wwwroot\Download" class="form-control" required />
+                    <button type="submit" class="btn btn-success">Create</button>
+                </form>
+            </div>
+            <div class="card-footer bg-success text-white">
+                @Model.message
+            </div>
+        </div>
+
+    </div>
+</div>
 

@@ -86,7 +86,7 @@ namespace DropboxCore.Services
         /// <param name="localFilePath">Local directory where to download file</param>
         /// <returns>True if file download went successfully, else False</returns>
         Task<bool> DownloadFile(string svcFileUri, string localFilePath);
-
+        Task<string> DownloadFile1(string svcFileUri, string localFilePath);
         /// <summary>
         /// Downloads a folder as a .zip archive.
         /// </summary>
