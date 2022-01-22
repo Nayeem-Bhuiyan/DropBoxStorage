@@ -16,8 +16,10 @@ namespace DropboxCore.Areas.DropBox.Controllers
         {
             _dropBoxService = dropBoxService;
         }
-        public IActionResult Index()
+        public IActionResult DownloadZip()
         {
+            downlo
+            
             return View();
         }
     }
