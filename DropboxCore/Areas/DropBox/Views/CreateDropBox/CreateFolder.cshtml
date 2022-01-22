@@ -5,11 +5,39 @@
 }
 
 <div class="row">
-    <div class="col-md-12">
-        <form asp-area="DropBox" asp-controller="CreateDropBox" asp-action="CreateFolder" method="post">
-            <input type="text" name="FolderName" id="FolderName" value="" required/>
-            <button type="submit">Create</button>
-        </form>
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header">
+                <h3>Create New Dropbox Folder</h3>
+            </div>
+            <div class="card-body">
+                <form asp-area="DropBox" asp-controller="CreateDropBox" asp-action="CreateFolder" method="post">
+                    <input type="text" name="FolderName" id="FolderName" value="" class="form-control" required />
+                    <button type="submit" class="btn btn-success">Create</button>
+                </form>
+            </div>
+
+            @if (Model.message == "Successfully Folder Created")
+            {
+                <div class="card-footer bg-success text-white">
+                    <h5> @Model.message</h5><a href="@Model.FolderLink" class="btn btn-primary" target="_blank">Go</a>
+                </div>
+            }
+            else if (Model.message == null)
+            {
+                <div class="card-footer">
+                   
+                </div>
+            }
+            else
+            {
+                <div class="card-footer bg-danger text-white">
+                    <h5> @Model.message</h5><a href="@Model.FolderLink" class="btn btn-primary" target="_blank">Go</a>
+                </div>
+            }
+
+        </div>
+
     </div>
 </div>
 

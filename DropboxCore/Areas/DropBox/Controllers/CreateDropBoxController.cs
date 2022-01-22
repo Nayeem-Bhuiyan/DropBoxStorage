@@ -5,7 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-
+using dropboxApi = global::Dropbox.Api;
 namespace DropboxCore.Areas.DropBox.Controllers
 {
     [Area("DropBox")]
@@ -30,9 +30,28 @@ namespace DropboxCore.Areas.DropBox.Controllers
         [HttpPost]
         public async Task<IActionResult> CreateFolder(CreateDropBoxViewModel model)
         {
+            try
+            {
+                dropboxApi.Files.CreateFolderResult response =await _dropBoxService.CreateFolder("/" + model.FolderName+ DateTime.Now.ToString("dd-MM-yyyy"));
+                if (response!=null)
+                {
+                    model.message = "Successfully Folder Created";
+                    model.FolderLink = "https://www.dropbox.com/home/" + model.FolderName + DateTime.Now.ToString("dd-MM-yyyy");
+                }
+                else
+                {
+                    model.message = "Duplicate Folder Found";
+                    model.FolderLink = "https://www.dropbox.com/home/" + model.FolderName + DateTime.Now.ToString("dd-MM-yyyy");
 
-           await _dropBoxService.CreateFolder("/"+model.FolderName+DateTime.Now.ToString("dd-MM-yyyy"));
-            return View();
+                }
+            }
+            catch (Exception ex)
+            {
+                model.message = ex.Message;
+                throw;
+            }
+            
+            return View(model);
         }
 
 
