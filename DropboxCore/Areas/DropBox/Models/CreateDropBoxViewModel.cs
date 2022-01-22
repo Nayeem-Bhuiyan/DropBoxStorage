@@ -7,5 +7,6 @@ namespace DropboxCore.Areas.DropBox.Models
 {
     public class CreateDropBoxViewModel
     {
+        public string FolderName { get; set; }
     }
 }

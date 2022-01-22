@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DropboxCore.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20220121145240_Initial")]
+    [Migration("20220122033607_Initial")]
     partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

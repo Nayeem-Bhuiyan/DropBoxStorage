@@ -1,4 +1,5 @@
-﻿using DropboxCore.Services;
+﻿using DropboxCore.Areas.DropBox.Models;
+using DropboxCore.Services;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -19,9 +20,23 @@ namespace DropboxCore.Areas.DropBox.Controllers
             _dropBoxService = dropBoxService;
         }
 
-        public IActionResult Index()
+        public IActionResult CreateFolder()
         {
+            CreateDropBoxViewModel model = new CreateDropBoxViewModel();
+
+
+            return View(model);
+        }
+        [HttpPost]
+        public async Task<IActionResult> CreateFolder(CreateDropBoxViewModel model)
+        {
+
+           await _dropBoxService.CreateFolder(model.FolderName);
             return View();
         }
+
+
+
+
     }
 }
