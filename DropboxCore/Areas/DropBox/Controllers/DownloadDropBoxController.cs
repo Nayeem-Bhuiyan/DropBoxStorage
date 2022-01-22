@@ -1,4 +1,5 @@
-﻿using DropboxCore.Services;
+﻿using DropboxCore.Areas.DropBox.Models;
+using DropboxCore.Services;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -16,11 +17,28 @@ namespace DropboxCore.Areas.DropBox.Controllers
         {
             _dropBoxService = dropBoxService;
         }
+       [HttpGet]
         public IActionResult DownloadZip()
         {
-            downlo
+            DownloadDropBoxViewModel model = new DownloadDropBoxViewModel();
+            return View(model);
+        }
+        [HttpPost]
+        public IActionResult DownloadZip(DownloadDropBoxViewModel model)
+        {
             
+            return View(model);
+        }
+
+        [HttpGet]
+        public IActionResult DownloadFiles()
+        {
+           
             return View();
         }
+
+
+
+
     }
 }
