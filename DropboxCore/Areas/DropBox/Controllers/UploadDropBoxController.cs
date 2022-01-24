@@ -1,5 +1,6 @@
 ﻿using DropboxCore.Areas.DropBox.Models;
 using DropboxCore.Services;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -16,10 +17,11 @@ namespace DropboxCore.Areas.DropBox.Controllers
 
 
         private IDropboxManager _dropBoxService;
-
-        public UploadDropBoxController(IDropboxManager dropBoxService)
+        private IWebHostEnvironment _environment;
+        public UploadDropBoxController(IDropboxManager dropBoxService, IWebHostEnvironment environment)
         {
             _dropBoxService = dropBoxService;
+            _environment = environment;
         }
 
         public IActionResult Upload()
@@ -34,15 +36,27 @@ namespace DropboxCore.Areas.DropBox.Controllers
         public async Task<IActionResult> Upload([FromForm]UploadDropBoxViewModel model)
         {
 
-
+            List<string> ListPath = new List<string>();
             foreach (var file in model.files)
             {
-                string fullPath = Path.GetFullPath(file.FileName);
-                await _dropBoxService.UploadMultipleFiles("/Upload-22-01-2022", fullPath);
-
+                
+                string fileName = Path.GetFileName(file.FileName);
+                string FullPath = Path.Combine(_environment.WebRootPath, "Upload", fileName);
+                ListPath.Add(FullPath);
+                var inputStream = file.OpenReadStream();
+   
+                using (var fileStream = new FileStream(FullPath, FileMode.Create, FileAccess.Write))
+                {
+                    inputStream.CopyTo(fileStream);
+                }
+              
             }
-           
-            return View(model);
+            
+            foreach (var filePath in ListPath)
+            {
+                await _dropBoxService.UploadMultipleFiles("/Upload-22-01-2022", filePath);
+            }
+           return View(model);
         }
 
         public IActionResult UploadChunkFile()
