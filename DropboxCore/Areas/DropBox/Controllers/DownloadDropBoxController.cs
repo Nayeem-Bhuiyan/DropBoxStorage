@@ -143,9 +143,7 @@ namespace DropboxCore.Areas.DropBox.Controllers
         {
             try
             {
-
-
-                Downloader data = new Downloader(@"D:\ExceedSystemTest\DropBoxStorage\DropboxCore\wwwroot\Upload\WebDevelopment.zip", @"D:\ExceedSystemTest\DropBoxStorage\DropboxCore\wwwroot\Download",2000);
+                //Downloader data = new Downloader(@"D:\ExceedSystemTest\DropBoxStorage\DropboxCore\wwwroot\Upload\WebDevelopment.zip", @"D:\ExceedSystemTest\DropBoxStorage\DropboxCore\wwwroot\Download",2000);
                 DropboxDownloadResult response = await _dropBoxService.GetFileDownload(model.dropboxFilePath);
                 return File(response.Content, "application/zip", response.FileName);
             }
