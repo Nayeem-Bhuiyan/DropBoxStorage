@@ -11,6 +11,8 @@ using dropboxApi = global::Dropbox.Api;
 using Microsoft.Extensions.Configuration;
 using Dropbox.Api.Files;
 using DropboxCore.Areas.DropBox.Models;
+using System.IO.Compression;
+using System.Threading;
 
 namespace DropboxCore.Services
 {
@@ -604,8 +606,10 @@ namespace DropboxCore.Services
                 FileName = downloadResponse.Response.AsFile.Name,
                 Content = await downloadResponse.GetContentAsByteArrayAsync()
             };
+
             return result;
         }
+
         #endregion
 
     }
