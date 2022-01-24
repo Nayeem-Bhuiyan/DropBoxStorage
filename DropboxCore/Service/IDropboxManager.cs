@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Xml;
+using DropboxCore.Areas.DropBox.Models;
 using DropboxCore.Models;
 using dropboxApi = global::Dropbox.Api;
 
@@ -102,5 +103,6 @@ namespace DropboxCore.Services
         /// <param name="files">List with download file routes</param>
         /// <param name="CompletedCallback">Callback delegate that is called on operation completion</param>
         Task Download(List<FileRequestInfo> files, Action<bool, bool> CompletedCallback);
+        Task<DropboxDownloadResult> GetFileDownload(string path);
     }
 }

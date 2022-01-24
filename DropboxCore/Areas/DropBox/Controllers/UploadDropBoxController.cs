@@ -75,15 +75,15 @@ namespace DropboxCore.Areas.DropBox.Controllers
 
 
                 }
-                string fullFolderPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/Upload");
-                string finalPath = $"{fullFolderPath}.zip";
-                FileInfo zip = new FileInfo(finalPath);
-                if (!zip.Exists)
+
+                foreach (var file in Directory.GetFiles(Path.Combine(Directory.GetCurrentDirectory(), "wwwroot\\Upload")))
                 {
-                    ZipFile.CreateFromDirectory(model.fileSourcePath, finalPath);
+                    string fullFolderPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot\\Upload");
+
+                    await _dropBoxService.ChunkUpload(file, $"/Upload-22-01-2022");
                 }
 
-                await _dropBoxService.ChunkUpload(zip.FullName, $"/{zip.Name}");
+
             }
             catch (Exception exc)
             {

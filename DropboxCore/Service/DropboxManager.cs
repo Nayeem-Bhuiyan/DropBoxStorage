@@ -10,6 +10,7 @@ using System.Xml;
 using dropboxApi = global::Dropbox.Api;
 using Microsoft.Extensions.Configuration;
 using Dropbox.Api.Files;
+using DropboxCore.Areas.DropBox.Models;
 
 namespace DropboxCore.Services
 {
@@ -219,47 +220,57 @@ namespace DropboxCore.Services
         /// <returns></returns>
         public  async Task ChunkUpload(string sourceFile, string location)
         {
-
-            string AccessToken = _IConfiguration.GetSection("DropBoxAccessToken").Value;
-            var client = new dropboxApi.DropboxClient(AccessToken);
-
-            const int chunkSize = 1024 * 1024 * 10;
-
-            using (FileStream stream = File.OpenRead(sourceFile))
+            try
             {
-                int numChunks = (int)Math.Ceiling((double)stream.Length / chunkSize);
+                location = "https://www.dropbox.com/home/Upload-22-01-2022";
+                
+                string AccessToken = _IConfiguration.GetSection("DropBoxAccessToken").Value;
+                var client = new dropboxApi.DropboxClient(AccessToken);
 
-                byte[] buffer = new byte[chunkSize];
-                string sessionId = null;
+                const int chunkSize = 1024 * 1024 * 1024;
 
-                for (int idx = 0; idx < numChunks; idx++)
+                using (FileStream stream = File.OpenRead(sourceFile))
                 {
-                    Console.WriteLine($"{DateTime.Now} Start uploading chunk {idx}");
-                    int byteRead = stream.Read(buffer, 0, chunkSize);
+                    int numChunks = (int)Math.Ceiling((double)stream.Length / chunkSize);
 
-                    using (MemoryStream memStream = new MemoryStream(buffer, 0, byteRead))
+                    byte[] buffer = new byte[chunkSize];
+                    string sessionId = null;
+
+                    for (int idx = 0; idx < numChunks; idx++)
                     {
-                        if (idx == 0)
-                        {
-                            UploadSessionStartResult result = await client.Files.UploadSessionStartAsync(body: memStream);
-                            sessionId = result.SessionId;
-                        }
-                        else
-                        {
-                            UploadSessionCursor cursor = new UploadSessionCursor(sessionId, (ulong)(chunkSize * idx));
+                        Console.WriteLine($"{DateTime.Now} Start uploading chunk {idx}");
+                        int byteRead = stream.Read(buffer, 0, chunkSize);
 
-                            if (idx == numChunks - 1)
+                        using (MemoryStream memStream = new MemoryStream(buffer, 0, byteRead))
+                        {
+                            if (idx == 0)
                             {
-                                await client.Files.UploadSessionFinishAsync(cursor, new CommitInfo(location, WriteMode.Overwrite.Instance), memStream);
+                                UploadSessionStartResult result = await client.Files.UploadSessionStartAsync(body: memStream);
+                                sessionId = result.SessionId;
                             }
                             else
                             {
-                                await client.Files.UploadSessionAppendV2Async(cursor, body: memStream);
+                                UploadSessionCursor cursor = new UploadSessionCursor(sessionId, (ulong)(chunkSize * idx));
+
+                                if (idx == numChunks - 1)
+                                {
+                                    await client.Files.UploadSessionFinishAsync(cursor, new CommitInfo(location, WriteMode.Overwrite.Instance), memStream);
+                                }
+                                else
+                                {
+                                    await client.Files.UploadSessionAppendV2Async(cursor, body: memStream);
+                                }
                             }
                         }
                     }
                 }
             }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                throw;
+            }
+
         }
 
 
@@ -581,6 +592,20 @@ namespace DropboxCore.Services
             }
         }
 
+        //path=dropboxfilePath
+        public async Task<DropboxDownloadResult> GetFileDownload(string path)
+        {
+             string AccessToken = _IConfiguration.GetSection("DropBoxAccessToken").Value;
+             var client = new dropboxApi.DropboxClient(AccessToken);
+             var downloadResponse = await client.Files.DownloadAsync(path);
+
+            var result = new DropboxDownloadResult
+            {
+                FileName = downloadResponse.Response.AsFile.Name,
+                Content = await downloadResponse.GetContentAsByteArrayAsync()
+            };
+            return result;
+        }
         #endregion
 
     }

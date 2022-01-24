@@ -11,9 +11,10 @@
                 Download Folder(Zip)
             </div>
             <div class="card-body">
-                <form asp-area="DropBox" asp-controller="DownloadDropBox" asp-action="DownloadFiles" method="post">
-                    <input type="text" name="dropboxFolderPath" id="dropboxFolderPath" value="/Upload-22-01-2022/Dropbox-master.zip" class="form-control" required />
-                    <input type="text" name="localFolderPath" id="localFolderPath" value="D:\ExceedSystemTest\DropBoxStorage\DropboxCore\wwwroot\Download" class="form-control" required />
+                <form asp-area="DropBox" asp-controller="DownloadDropBox" asp-action="DownloadFile" method="post">
+                    @*<input type="text" name="dropboxFolderPath" id="dropboxFolderPath" value="/Upload-22-01-2022/FileUploadDownload.rar" class="form-control" required />*@
+                    <input type="text" name="dropboxFilePath" id="dropboxFilePath" value="/Upload-22-01-2022/FileUploadDownload.rar" class="form-control" required />
+                    @*<input type="text" name="localFolderPath" id="localFolderPath" value="D:\ExceedSystemTest\DropBoxStorage\DropboxCore\wwwroot\Download" class="form-control" required />*@
                     <button type="submit" class="btn btn-success">Create</button>
                 </form>
             </div>
