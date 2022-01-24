@@ -1,0 +1,25 @@
+﻿@model UploadDropBoxViewModel
+@{
+    ViewData["Title"] = "UploadChunkFile";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="row">
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header bg-success text-white">
+             Upload Chunk File
+            </div>
+            <div class="card-body">
+                <form asp-area="DropBox" asp-controller="UploadDropBox" asp-action="UploadChunkFile" method="post" enctype="multipart/form-data">
+                    <input type="file" name="files" id="files" value="" class="form-control" multiple />
+                    <button type="submit" class="btn btn-success">Create</button>
+                </form>
+            </div>
+            <div class="card-footer bg-success text-white">
+
+            </div>
+        </div>
+
+    </div>
+</div>

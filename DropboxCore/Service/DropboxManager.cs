@@ -214,6 +214,63 @@ namespace DropboxCore.Services
         #endregion
 
         #region UploadSection
+        /// <param name="sourceFile">Byte array to upload.</param>
+        /// <param name="location">Location on dropbox.</param>
+        /// <returns></returns>
+        public  async Task ChunkUpload(string sourceFile, string location)
+        {
+
+            string AccessToken = _IConfiguration.GetSection("DropBoxAccessToken").Value;
+            var client = new dropboxApi.DropboxClient(AccessToken);
+
+            const int chunkSize = 1024 * 1024 * 10;
+
+            using (FileStream stream = File.OpenRead(sourceFile))
+            {
+                int numChunks = (int)Math.Ceiling((double)stream.Length / chunkSize);
+
+                byte[] buffer = new byte[chunkSize];
+                string sessionId = null;
+
+                for (int idx = 0; idx < numChunks; idx++)
+                {
+                    Console.WriteLine($"{DateTime.Now} Start uploading chunk {idx}");
+                    int byteRead = stream.Read(buffer, 0, chunkSize);
+
+                    using (MemoryStream memStream = new MemoryStream(buffer, 0, byteRead))
+                    {
+                        if (idx == 0)
+                        {
+                            UploadSessionStartResult result = await client.Files.UploadSessionStartAsync(body: memStream);
+                            sessionId = result.SessionId;
+                        }
+                        else
+                        {
+                            UploadSessionCursor cursor = new UploadSessionCursor(sessionId, (ulong)(chunkSize * idx));
+
+                            if (idx == numChunks - 1)
+                            {
+                                await client.Files.UploadSessionFinishAsync(cursor, new CommitInfo(location, WriteMode.Overwrite.Instance), memStream);
+                            }
+                            else
+                            {
+                                await client.Files.UploadSessionAppendV2Async(cursor, body: memStream);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+
+
+
+
+
+
+
+
+
         /// <summary>
         /// Uploads the files from PC local directory to Dropbox folder.
         /// </summary>

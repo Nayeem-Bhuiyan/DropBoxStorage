@@ -70,6 +70,7 @@ namespace DropboxCore.Services
         /// <param name="localDirPath">Path from where to upload files</param>
         /// <param name="filePaths">File URIs (Example: [ "/app/UploadFolder/file.jpg", "/app/UploadFolder/SubFolder/file2.jpg" ] etc.)</param>
         /// <returns>List with uploaded file metadata</returns>
+        Task ChunkUpload(string sourceFile, string location);
         Task<List<dropboxApi.Files.FileMetadata>> UploadFiles(string svcPath, string localDirPath, List<string> filePaths);
         Task<dropboxApi.Files.FileMetadata> UploadMultipleFiles(string DropBoxFolderPath, string LocalSourcePath);
         /// <summary>

@@ -10,5 +10,6 @@ namespace DropboxCore.Areas.DropBox.Models
     {
         public string filesName { get; set; }
         public IFormFile[] files { get; set; }
+        public string fileSourcePath { get; set; }
     }
 }

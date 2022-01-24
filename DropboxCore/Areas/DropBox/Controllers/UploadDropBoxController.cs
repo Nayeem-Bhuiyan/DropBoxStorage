@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.IO.Compression;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -34,7 +35,6 @@ namespace DropboxCore.Areas.DropBox.Controllers
         {
 
 
-
             foreach (var file in model.files)
             {
                 string fullPath = Path.GetFullPath(file.FileName);
@@ -44,6 +44,56 @@ namespace DropboxCore.Areas.DropBox.Controllers
            
             return View(model);
         }
+
+        public IActionResult UploadChunkFile()
+        {
+            UploadDropBoxViewModel model = new UploadDropBoxViewModel();
+            return View(model);
+        }
+
+            [HttpPost]
+        public async Task<IActionResult> UploadChunkFile([FromForm]UploadDropBoxViewModel model)
+        {
+
+            try
+            {
+
+                foreach (var file in model.files)
+                {
+                    string fileName = Path.GetFileName(file.FileName);
+                    
+                    string fullSourcePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot\\Upload", fileName);
+                    if (System.IO.File.Exists(fullSourcePath))
+                    {
+                        System.IO.File.Delete(fullSourcePath);
+                    }
+                    using (var localFile = System.IO.File.OpenWrite(fullSourcePath)) 
+                    using (var uploadedFile =file.OpenReadStream())
+                    {
+                        uploadedFile.CopyTo(localFile);
+                    }
+
+
+                }
+                string fullFolderPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/Upload");
+                string finalPath = $"{fullFolderPath}.zip";
+                FileInfo zip = new FileInfo(finalPath);
+                if (!zip.Exists)
+                {
+                    ZipFile.CreateFromDirectory(model.fileSourcePath, finalPath);
+                }
+
+                await _dropBoxService.ChunkUpload(zip.FullName, $"/{zip.Name}");
+            }
+            catch (Exception exc)
+            {
+                Console.WriteLine(exc.Message);
+            }
+
+            return View(model);
+        }
+
+
 
 
 
