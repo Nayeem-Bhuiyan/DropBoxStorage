@@ -517,6 +517,7 @@ namespace DropboxCore.Service
             try
             {
                 string AccessToken = _IConfiguration.GetSection("DropBoxAccessToken").Value;
+
                 string sharedFolderUrl = await this.GetFolderSharedLink(svcUri);
                 string fullPath = Path.Combine(localFilePath, $"{Path.GetFileName(svcUri)}.zip");
 
