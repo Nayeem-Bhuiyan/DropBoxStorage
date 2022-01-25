@@ -14,7 +14,9 @@ using DropboxCore.Areas.DropBox.Models;
 using System.IO.Compression;
 using System.Threading;
 using DropboxCore.Service.Interface;
-namespace DropboxCore.Service.Interface
+using DropboxCore.Services;
+
+namespace DropboxCore.Service
 {
     public class DropboxManager : IDropboxManager
     {
@@ -39,29 +41,6 @@ namespace DropboxCore.Service.Interface
         /// Currently downloading files count.
         /// </summary>
         public static int FilesToDownloadCount { get; set; }
-
-        /// <summary>
-        /// Returns access token
-        /// </summary>
-        //public static string AccessToken
-        //{
-        //    get
-        //    {
-        //        return ACCESS_TOKEN;
-        //    }
-        //}
-
-        /// <summary>
-        /// The root path where DwgOperations app files are stored.
-        /// </summary>
-        public static string AppRootUri
-        {
-            get
-            {
-                return APP_ROOT_URI;
-            }
-        }
-
 
         #region XmlSection
         /// <summary>
