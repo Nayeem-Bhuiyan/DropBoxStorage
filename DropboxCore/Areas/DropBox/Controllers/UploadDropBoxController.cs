@@ -55,14 +55,14 @@ namespace DropboxCore.Areas.DropBox.Controllers
 
                 var localDirectory = Path.Combine(_environment.WebRootPath,"Upload");
 
-                await _uploadService.UploadToDropBoxAsync(localDirectory, FullPath);
+                await _uploadService.UploadToDropBoxAsync("Upload-22-01-2022", fileName, FullPath);
               
             }
             
-            foreach (var filePath in ListPath)
-            {
-                await _dropBoxService.UploadMultipleFiles("/Upload-22-01-2022", filePath);
-            }
+            //foreach (var filePath in ListPath)
+            //{
+            //    await _dropBoxService.UploadMultipleFiles("/Upload-22-01-2022/", filePath);
+            //}
            return View(model);
         }
 

@@ -3,6 +3,7 @@ using DropboxCore.Service;
 using DropboxCore.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http.Features;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc.Razor;
 using Microsoft.EntityFrameworkCore;
@@ -52,8 +53,13 @@ namespace DropboxCore
             services.AddMvc(options =>
             {
                 options.EnableEndpointRouting = false;
-                options.MaxModelBindingCollectionSize = 100000;
+                //options.MaxModelBindingCollectionSize = 100000;
+                options.MaxModelBindingCollectionSize = 1600000000;
             });
+
+            services.Configure<FormOptions>(x => x.ValueCountLimit = 1600000000);
+            //200 megabyte
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
