@@ -50,6 +50,7 @@ namespace DropboxCore
             services.AddScoped<IUploadService, UploadService>();
             services.AddScoped<IDeleteDropBoxService,DeleteDropBoxService>();
             services.AddScoped<ICreateDropBoxService,CreateDropBoxService>();
+            services.AddScoped<IDownloadDropBoxService, DownloadDropBoxService>();
             #endregion
 
             services.AddMvc(options =>
