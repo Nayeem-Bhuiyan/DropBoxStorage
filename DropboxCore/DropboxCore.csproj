@@ -20,7 +20,6 @@
     <Folder Include="Helper\" />
     <Folder Include="Helper\" />
     <Folder Include="wwwroot\Download\" />
-    <Folder Include="wwwroot\Upload\" />
   </ItemGroup>
 
 </Project>

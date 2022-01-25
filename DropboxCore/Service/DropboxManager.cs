@@ -196,21 +196,23 @@ namespace DropboxCore.Service
         #endregion
 
         #region UploadSection
-        /// <param name="sourceFile">Byte array to upload.</param>
-        /// <param name="location">Location on dropbox.</param>
+        /// <param name="LocalSourceFilePath">Byte array to upload.</param>
+        /// <param name="DropBoxFolderPath">Location on dropbox.</param>
         /// <returns></returns>
-        public  async Task ChunkUpload(string sourceFile, string location)
+        public async Task ChunkUpload(string LocalSourceFilePath, string DropBoxFolderPath)
         {
             try
             {
-                location = "https://www.dropbox.com/home/Upload-22-01-2022";
+                LocalSourceFilePath = @"D:\ExceedSystemTest\DropBoxStorage\DropboxCore\wwwroot\Upload\DropboxRESTApi-master.zip";
+
+                DropBoxFolderPath = "https://www.dropbox.com/home/Upload-22-01-2022/DropboxRESTApi-master.zip";
                 
                 string AccessToken = _IConfiguration.GetSection("DropBoxAccessToken").Value;
                 var client = new dropboxApi.DropboxClient(AccessToken);
 
                 const int chunkSize = 1024 * 1024 * 1024;
 
-                using (FileStream stream = File.OpenRead(sourceFile))
+                using (FileStream stream = File.OpenRead(LocalSourceFilePath))
                 {
                     int numChunks = (int)Math.Ceiling((double)stream.Length / chunkSize);
 
@@ -235,7 +237,7 @@ namespace DropboxCore.Service
 
                                 if (idx == numChunks - 1)
                                 {
-                                    await client.Files.UploadSessionFinishAsync(cursor, new CommitInfo(location, WriteMode.Overwrite.Instance), memStream);
+                                    await client.Files.UploadSessionFinishAsync(cursor, new CommitInfo(DropBoxFolderPath, WriteMode.Overwrite.Instance), memStream);
                                 }
                                 else
                                 {
