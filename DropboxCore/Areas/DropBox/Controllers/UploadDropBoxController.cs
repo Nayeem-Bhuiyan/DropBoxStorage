@@ -101,7 +101,7 @@ namespace DropboxCore.Areas.DropBox.Controllers
                 {
                     string fullFolderPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot\\Upload");
 
-                    await _dropBoxService.ChunkUpload(file, $"/Upload-22-01-2022");
+                    await _uploadService.ChunkUpload(file, $"/Upload-22-01-2022");
                 }
 
 
