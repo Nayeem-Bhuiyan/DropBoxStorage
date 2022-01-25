@@ -13,8 +13,8 @@ using Dropbox.Api.Files;
 using DropboxCore.Areas.DropBox.Models;
 using System.IO.Compression;
 using System.Threading;
-
-namespace DropboxCore.Services
+using DropboxCore.Service.Interface;
+namespace DropboxCore.Service.Interface
 {
     public class DropboxManager : IDropboxManager
     {
