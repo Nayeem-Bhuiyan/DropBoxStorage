@@ -1,4 +1,5 @@
 using DropboxCore.Data;
+using DropboxCore.Service;
 using DropboxCore.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -45,6 +46,7 @@ namespace DropboxCore
             services.AddSingleton<IConfiguration>(Configuration);
             #region DropboxManager
             services.AddScoped<IDropboxManager, DropboxManager>();
+            services.AddScoped<IUploadService, UploadService>();
             #endregion
 
             services.AddMvc(options =>

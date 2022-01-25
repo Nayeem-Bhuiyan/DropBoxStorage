@@ -1,4 +1,5 @@
 ﻿using DropboxCore.Areas.DropBox.Models;
+using DropboxCore.Service;
 using DropboxCore.Services;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
@@ -17,11 +18,13 @@ namespace DropboxCore.Areas.DropBox.Controllers
 
 
         private IDropboxManager _dropBoxService;
+        private IUploadService _uploadService;
         private IWebHostEnvironment _environment;
-        public UploadDropBoxController(IDropboxManager dropBoxService, IWebHostEnvironment environment)
+        public UploadDropBoxController(IDropboxManager dropBoxService, IWebHostEnvironment environment, IUploadService uploadService)
         {
             _dropBoxService = dropBoxService;
             _environment = environment;
+            _uploadService = uploadService;
         }
 
         public IActionResult Upload()
@@ -49,6 +52,10 @@ namespace DropboxCore.Areas.DropBox.Controllers
                 {
                     inputStream.CopyTo(fileStream);
                 }
+
+                var localDirectory = Path.Combine(_environment.WebRootPath,"Upload");
+
+                await _uploadService.UploadToDropBoxAsync(localDirectory, FullPath);
               
             }
             
