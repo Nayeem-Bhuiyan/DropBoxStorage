@@ -40,30 +40,34 @@ namespace DropboxCore.Areas.DropBox.Controllers
 
 
         [HttpPost]
-        [RequestFormLimits(MultipartBodyLengthLimit = 5368709120)]  //5368709120=5GB
+        [RequestFormLimits(MultipartBodyLengthLimit = 5368709120)]
         [RequestSizeLimit(5368709120)]
         public async Task<IActionResult> Upload([FromForm] UploadDropBoxViewModel model)
         {
-
-            List<string> ListPath = new List<string>();
-            foreach (var file in model.files)
+            
+            try
             {
-
-                string fileName = Path.GetFileName(file.FileName);
-                string FullPath = Path.Combine(_environment.WebRootPath, "Upload", fileName);
-                ListPath.Add(FullPath);
-                var inputStream = file.OpenReadStream();
-
-                using (var fileStream = new FileStream(FullPath, FileMode.Create, FileAccess.Write))
+                foreach (var file in model.files)
                 {
-                    inputStream.CopyTo(fileStream);
+
+                    string fileName = Path.GetFileName(file.FileName);
+                    string FullPath = Path.Combine(_environment.WebRootPath, "Upload", fileName);
+                    var inputStream = file.OpenReadStream();
+                    using (var fileStream = new FileStream(FullPath, FileMode.Create, FileAccess.Write))
+                    {
+                        inputStream.CopyTo(fileStream);
+                    }
+                    await _uploadService.UploadToDropBoxAsync("Upload-22-01-2022", fileName, FullPath);
+
                 }
-
-                var localDirectory = Path.Combine(_environment.WebRootPath, "Upload");
-
-                await _uploadService.UploadToDropBoxAsync("Upload-22-01-2022", fileName, FullPath);
-
+                model.responseMessage = "success";
             }
+            catch (Exception ex)
+            {
+                model.responseMessage = ex.Message;
+                throw;
+            }
+
 
             return Json(model);
         }
