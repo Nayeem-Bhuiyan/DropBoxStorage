@@ -58,10 +58,13 @@ namespace DropboxCore
             {
                 options.EnableEndpointRouting = false;
                 //options.MaxModelBindingCollectionSize = 100000;
-                options.MaxModelBindingCollectionSize = 1600000000;
+                //options.MaxModelBindingCollectionSize = 1600000000;
             });
 
-            services.Configure<FormOptions>(x => x.ValueCountLimit = 1600000000);
+            services.Configure<FormOptions>(x =>
+            {
+                x.MultipartBodyLengthLimit = 5368709120;
+            });
             //200 megabyte
 
         }

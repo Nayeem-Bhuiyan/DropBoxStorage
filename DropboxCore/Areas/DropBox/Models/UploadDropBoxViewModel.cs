@@ -9,7 +9,7 @@ namespace DropboxCore.Areas.DropBox.Models
     public class UploadDropBoxViewModel
     {
         public string filesName { get; set; }
-        public IFormFile[] files { get; set; }
+        public IEnumerable<IFormFile> files { get; set; }
         public string fileSourcePath { get; set; }
     }
 }

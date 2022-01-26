@@ -81,7 +81,7 @@ namespace DropboxCore.Areas.DropBox.Controllers
             }
             catch (Exception ex)
             {
-
+                Console.WriteLine(ex.Message);
                 throw;
             }
             return View(model);

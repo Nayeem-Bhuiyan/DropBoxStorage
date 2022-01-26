@@ -6,6 +6,8 @@
     <title>@ViewData["Title"] - DropboxCore</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" />
+    <link href="~/assets/sweetalert2/dist/sweetalert2.min.css" rel="stylesheet" />
+    @RenderSection("Style", required: false)
 </head>
 <body>
     <header>
@@ -23,10 +25,10 @@
                         </li>
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="DropBox" asp-controller="DownloadDropBox" asp-action="DownloadFiles">DownloadFiles</a>
-                        </li>  
+                        </li>
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="DropBox" asp-controller="UploadDropBox" asp-action="Upload">Upload</a>
-                        </li> 
+                        </li>
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="DropBox" asp-controller="UploadDropBox" asp-action="UploadChunkFile">UploadChunkFile</a>
                         </li>
@@ -49,6 +51,7 @@
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
+    <script src="~/assets/sweetalert2/dist/sweetalert2.min.js"></script>
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>

@@ -8,6 +8,8 @@ using System.Collections.Generic;
 using System.IO;
 using System.IO.Compression;
 using System.Linq;
+using System.Net.Http;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace DropboxCore.Areas.DropBox.Controllers
@@ -35,36 +37,38 @@ namespace DropboxCore.Areas.DropBox.Controllers
             return View(model);
         }
 
+
+
         [HttpPost]
-        public async Task<IActionResult> Upload([FromForm]UploadDropBoxViewModel model)
+        [RequestFormLimits(MultipartBodyLengthLimit = 5368709120)]  //5368709120=5GB
+        [RequestSizeLimit(5368709120)]
+        public async Task<IActionResult> Upload([FromForm] UploadDropBoxViewModel model)
         {
 
             List<string> ListPath = new List<string>();
             foreach (var file in model.files)
             {
-                
+
                 string fileName = Path.GetFileName(file.FileName);
                 string FullPath = Path.Combine(_environment.WebRootPath, "Upload", fileName);
                 ListPath.Add(FullPath);
                 var inputStream = file.OpenReadStream();
-   
+
                 using (var fileStream = new FileStream(FullPath, FileMode.Create, FileAccess.Write))
                 {
                     inputStream.CopyTo(fileStream);
                 }
 
-                var localDirectory = Path.Combine(_environment.WebRootPath,"Upload");
+                var localDirectory = Path.Combine(_environment.WebRootPath, "Upload");
 
                 await _uploadService.UploadToDropBoxAsync("Upload-22-01-2022", fileName, FullPath);
-              
+
             }
-            
-            //foreach (var filePath in ListPath)
-            //{
-            //    await _dropBoxService.UploadMultipleFiles("/Upload-22-01-2022/", filePath);
-            //}
-           return View(model);
+
+            return Json(model);
         }
+
+
 
         public IActionResult UploadChunkFile()
         {
@@ -79,6 +83,8 @@ namespace DropboxCore.Areas.DropBox.Controllers
             try
             {
 
+                //List<string> LocalSoucePathList = new List<string>();
+
                 foreach (var file in model.files)
                 {
                     string fileName = Path.GetFileName(file.FileName);
@@ -92,19 +98,19 @@ namespace DropboxCore.Areas.DropBox.Controllers
                     using (var uploadedFile =file.OpenReadStream())
                     {
                         uploadedFile.CopyTo(localFile);
+                        //LocalSoucePathList.Add(fullSourcePath);
+                        await _uploadService.ChunkUpload(fullSourcePath, $"/Upload-22-01-2022",fileName);
                     }
 
 
                 }
 
-                foreach (var file in Directory.GetFiles(Path.Combine(Directory.GetCurrentDirectory(), "wwwroot\\Upload")))
-                {
-                    string fullFolderPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot\\Upload");
+                //foreach (var localSoucePath in LocalSoucePathList)
+                //{
+                    
+                   
 
-                    await _uploadService.ChunkUpload(file, $"/Upload-22-01-2022");
-                }
-
-
+                //}
             }
             catch (Exception exc)
             {
