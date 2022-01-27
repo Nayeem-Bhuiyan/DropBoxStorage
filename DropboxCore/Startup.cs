@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http.Features;
 using Microsoft.AspNetCore.HttpsPolicy;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Razor;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -63,8 +64,18 @@ namespace DropboxCore
             {
                 x.MultipartBodyLengthLimit = 85899345920;
             });
-            
 
+            services.AddRazorPages(options =>
+            {
+                options.Conventions
+                    .AddPageApplicationModelConvention("/DropBox/UploadDropBox/Upload",
+                        model =>
+                        {
+                
+                model.Filters.Add(
+                                new RequestSizeLimitAttribute(85899345920));
+                        });
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

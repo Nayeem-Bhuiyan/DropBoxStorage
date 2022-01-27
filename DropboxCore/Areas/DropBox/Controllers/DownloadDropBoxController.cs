@@ -365,12 +365,12 @@ namespace DropboxCore.Areas.DropBox.Controllers
 
 
 
+    /// </summary>
     }
 
 
     /// <summary>
     /// Implementation of the downloader module
-    /// </summary>
    //public class Downloader
    // {
    //     //Units in bytes

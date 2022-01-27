@@ -39,6 +39,7 @@ namespace DropboxCore.Areas.DropBox.Controllers
 
 
         [HttpPost]
+
         [RequestFormLimits(MultipartBodyLengthLimit = 85899345920)]
         [RequestSizeLimit(85899345920)]
         public async Task<IActionResult> Upload([FromForm] UploadDropBoxViewModel model)
@@ -51,11 +52,21 @@ namespace DropboxCore.Areas.DropBox.Controllers
 
                     string fileName = Path.GetFileName(file.FileName);
                     string FullPath = Path.Combine(_environment.WebRootPath, "Upload", fileName);
-                    var inputStream = file.OpenReadStream();
-                    using (var fileStream = new FileStream(FullPath, FileMode.Create, FileAccess.Write))
+                    //var inputStream = file.OpenReadStream();
+                    //using (var fileStream = new FileStream(FullPath, FileMode.Create, FileAccess.Write))
+                    //{
+                    //    inputStream.CopyTo(fileStream);
+                    //}
+
+
+                    if (file.Length > 0)
                     {
-                        inputStream.CopyTo(fileStream);
+                        using (var fileStream = System.IO.File.Create(FullPath))
+                        {
+                            await file.CopyToAsync(fileStream);
+                        }
                     }
+
                     await _uploadService.UploadToDropBoxAsync("Upload-22-01-2022", fileName, FullPath);
 
                 }
@@ -99,11 +110,22 @@ namespace DropboxCore.Areas.DropBox.Controllers
                     {
                         System.IO.File.Delete(fullSourcePath);
                     }
-                    using (var localFile = System.IO.File.OpenWrite(fullSourcePath)) 
-                    using (var uploadedFile =file.OpenReadStream())
+                    //using (var localFile = System.IO.File.OpenWrite(fullSourcePath)) 
+                    //using (var uploadedFile =file.OpenReadStream())
+                    //{
+                    //    uploadedFile.CopyTo(localFile);
+                        
+
+                    //    //LocalSoucePathList.Add(fullSourcePath);
+                    //}
+
+
+                    if (file.Length > 0)
                     {
-                        uploadedFile.CopyTo(localFile);
-                        //LocalSoucePathList.Add(fullSourcePath);
+                        using (var stream = System.IO.File.Create(fullSourcePath))
+                        {
+                            await file.CopyToAsync(stream);
+                        }
                     }
 
                     await _uploadService.ChunkUpload(fullSourcePath, $"/Upload-22-01-2022", fileName);

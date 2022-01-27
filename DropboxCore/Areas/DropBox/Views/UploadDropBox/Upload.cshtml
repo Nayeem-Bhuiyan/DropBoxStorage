@@ -115,8 +115,8 @@
                                 console.log(data.responseMessage);
                             })
                         }).fail(function () {
-                            $("#uploadImageSection").show();
-                            $("#frmSection").hide();
+                            $("#uploadImageSection").hide();
+                            $("#frmSection").show();
                             $('#loadingImg').hide();
                             $('#btnSave').attr('disabled', false);
                             swal.fire('warning', 'Failed!', 'warning');
