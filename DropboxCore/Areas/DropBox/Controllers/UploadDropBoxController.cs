@@ -110,16 +110,12 @@ namespace DropboxCore.Areas.DropBox.Controllers
 
                 }
 
-                //foreach (var localSoucePath in LocalSoucePathList)
-                //{
-                    
-                   
-
-                //}
+                model.responseMessage = "success";
             }
-            catch (Exception exc)
+            catch (Exception ex)
             {
-                Console.WriteLine(exc.Message);
+                model.responseMessage = ex.Message;
+                Console.WriteLine(ex.Message);
             }
 
             return Json(model);
