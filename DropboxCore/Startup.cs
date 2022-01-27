@@ -57,7 +57,6 @@ namespace DropboxCore
             services.AddMvc(options =>
             {
                 options.EnableEndpointRouting = false;
-                options.MaxModelBindingCollectionSize = 85899345920;
             });
 
             services.Configure<FormOptions>(x =>
