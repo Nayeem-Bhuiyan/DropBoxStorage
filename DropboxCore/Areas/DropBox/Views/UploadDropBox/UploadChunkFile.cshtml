@@ -79,7 +79,7 @@
                 }).then((result) => {
                     if (result.isConfirmed) {
                         $.ajax({
-                            url: "/DropBox/UploadDropBox/Upload",
+                            url: "/DropBox/UploadDropBox/UploadChunkFile",
                             type: "POST",
                             data: frmdata,
                             enctype: "multipart/form-data",

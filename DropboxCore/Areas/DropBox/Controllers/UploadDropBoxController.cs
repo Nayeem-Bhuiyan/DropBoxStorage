@@ -80,6 +80,8 @@ namespace DropboxCore.Areas.DropBox.Controllers
         }
 
             [HttpPost]
+        [RequestFormLimits(MultipartBodyLengthLimit = 85899345920)]
+        [RequestSizeLimit(85899345920)]
         public async Task<IActionResult> UploadChunkFile([FromForm]UploadDropBoxViewModel model)
         {
 
