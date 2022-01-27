@@ -38,10 +38,9 @@ namespace DropboxCore.Areas.DropBox.Controllers
         }
 
 
-
         [HttpPost]
-        [RequestFormLimits(MultipartBodyLengthLimit = 5368709120)]
-        [RequestSizeLimit(5368709120)]
+        [RequestFormLimits(MultipartBodyLengthLimit = 85899345920)]
+        [RequestSizeLimit(85899345920)]
         public async Task<IActionResult> Upload([FromForm] UploadDropBoxViewModel model)
         {
             
