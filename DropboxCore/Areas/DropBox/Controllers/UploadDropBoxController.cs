@@ -104,10 +104,9 @@ namespace DropboxCore.Areas.DropBox.Controllers
                     {
                         uploadedFile.CopyTo(localFile);
                         //LocalSoucePathList.Add(fullSourcePath);
-                        await _uploadService.ChunkUpload(fullSourcePath, $"/Upload-22-01-2022",fileName);
                     }
 
-
+                    await _uploadService.ChunkUpload(fullSourcePath, $"/Upload-22-01-2022", fileName);
                 }
 
                 model.responseMessage = "success";
