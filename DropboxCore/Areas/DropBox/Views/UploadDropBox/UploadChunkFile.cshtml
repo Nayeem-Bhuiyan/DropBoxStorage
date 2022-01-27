@@ -22,23 +22,21 @@
             <img src="~/assets/Uploading/UploadingLeaf.gif" id="loadingImg" class="align-content-center" />
         </div>
         <div class="frmSection">
+            <div class="card">
+                <div class="card-header bg-success text-white">
+                    Upload Chunk File
+                </div>
+                <div class="card-body">
+                    <form id="frmData" asp-area="DropBox" asp-controller="UploadDropBox" asp-action="UploadChunkFile" method="post" enctype="multipart/form-data">
+                        <input type="file" name="files" id="files" value="" class="form-control" multiple />
+                        <button type="submit" id="btnSave" class="btn btn-success">Create</button>
+                    </form>
+                </div>
+                <div class="card-footer bg-success text-white">
 
+                </div>
+            </div>
         </div>
-        <div class="card">
-            <div class="card-header bg-success text-white">
-                Upload Chunk File
-            </div>
-            <div class="card-body">
-                <form id="frmData" asp-area="DropBox" asp-controller="UploadDropBox" asp-action="UploadChunkFile" method="post" enctype="multipart/form-data">
-                    <input type="file" name="files" id="files" value="" class="form-control" multiple />
-                    <button type="submit" id="btnSave" class="btn btn-success">Create</button>
-                </form>
-            </div>
-            <div class="card-footer bg-success text-white">
-
-            </div>
-        </div>
-
     </div>
 </div>
 @section Scripts{
