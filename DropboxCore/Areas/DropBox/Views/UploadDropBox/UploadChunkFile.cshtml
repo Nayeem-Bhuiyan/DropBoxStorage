@@ -97,12 +97,23 @@
                         }).done(function (data) {
                             $('#loadingImg').hide();
                             $('#btnSave').attr('disabled', false);
-                            swal.fire('success', 'Saved file Successfully!', 'success').then(function () {
-                                $("#uploadImageSection").show();
-                                $("#frmSection").hide();
-                                window.location.reload();
-                                console.log(data.responseMessage);
-                            })
+                            if (data.responseMessage ="success") {
+                                swal.fire('success', 'Saved file Successfully!', 'success').then(function () {
+                                    $("#uploadImageSection").show();
+                                    $("#frmSection").hide();
+                                    window.location.reload();
+                                    console.log(data.responseMessage);
+                                })
+                            }
+                            else {
+                                swal.fire('Error', 'Sorry Error!!', 'Error').then(function () {
+                                    $("#uploadImageSection").show();
+                                    $("#frmSection").hide();
+                                    window.location.reload();
+                                    console.log(data.responseMessage);
+                                })
+                            }
+                          
                         }).fail(function () {
                             $("#uploadImageSection").show();
                             $("#frmSection").hide();
