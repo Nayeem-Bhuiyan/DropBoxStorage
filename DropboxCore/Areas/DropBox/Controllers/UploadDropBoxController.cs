@@ -120,7 +120,7 @@ namespace DropboxCore.Areas.DropBox.Controllers
                 Console.WriteLine(exc.Message);
             }
 
-            return View(model);
+            return Json(model);
         }
 
 
