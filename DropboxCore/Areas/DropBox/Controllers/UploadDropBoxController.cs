@@ -76,7 +76,7 @@ namespace DropboxCore.Areas.DropBox.Controllers
                         //    await _uploadService.LargeFileUpload("Upload-22-01-2022", fileName, FullPath);
                         //}
 
-                        await _uploadService.Upload(FullPath,DropBoxUploadPath);
+                        await _uploadService.UploadToDropBox(FullPath,DropBoxUploadPath);
                     }
           
                 }
@@ -99,69 +99,6 @@ namespace DropboxCore.Areas.DropBox.Controllers
             stream.Read(buffer, 0, length);
             return buffer;
         }
-
-        public IActionResult UploadChunkFile()
-        {
-            UploadDropBoxViewModel model = new UploadDropBoxViewModel();
-            return View(model);
-        }
-
-            [HttpPost]
-        [RequestFormLimits(MultipartBodyLengthLimit = 85899345920)]
-        [RequestSizeLimit(85899345920)]
-        public async Task<IActionResult> UploadChunkFile([FromForm]UploadDropBoxViewModel model)
-        {
-
-            try
-            {
-
-                //List<string> LocalSoucePathList = new List<string>();
-
-                foreach (var file in model.files)
-                {
-                    string fileName = Path.GetFileName(file.FileName);
-                    
-                    string fullSourcePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot\\Upload", fileName);
-                    if (System.IO.File.Exists(fullSourcePath))
-                    {
-                        System.IO.File.Delete(fullSourcePath);
-                    }
-                    //using (var localFile = System.IO.File.OpenWrite(fullSourcePath)) 
-                    //using (var uploadedFile =file.OpenReadStream())
-                    //{
-                    //    uploadedFile.CopyTo(localFile);
-                        
-
-                    //    //LocalSoucePathList.Add(fullSourcePath);
-                    //}
-
-
-                    if (file.Length > 0)
-                    {
-                        using (var stream = System.IO.File.Create(fullSourcePath))
-                        {
-                            await file.CopyToAsync(stream);
-                        }
-                    }
-
-                    await _uploadService.ChunkUpload(fullSourcePath, $"/Upload-22-01-2022", fileName);
-                }
-
-                model.responseMessage = "success";
-            }
-            catch (Exception ex)
-            {
-                model.responseMessage = ex.Message;
-                Console.WriteLine(ex.Message);
-            }
-
-            return Json(model);
-        }
-
-
-
-
-
 
     }
 }
