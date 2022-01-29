@@ -68,10 +68,10 @@ namespace DropboxCore.Areas.DropBox.Controllers
                     {
 
 
-                        using (var fileStream = System.IO.File.Create(FullPath))
+                        var inputStream = file.OpenReadStream();
+                        using (var fileStream = new FileStream(FullPath, FileMode.Create, FileAccess.Write))
                         {
-                            await file.CopyToAsync(fileStream);
-
+                            inputStream.CopyTo(fileStream);
                         }
 
                         Stream stream = new FileStream(FullPath, FileMode.Open, FileAccess.Read);
