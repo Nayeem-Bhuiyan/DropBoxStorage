@@ -10,6 +10,7 @@ using System.IO;
 using System.IO.Compression;
 using System.Linq;
 using System.Net;
+using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -156,6 +157,34 @@ namespace DropboxCore.Areas.DropBox.Controllers
                 throw;
             }
         }
+
+        public async Task<FileResult> DownloadZipFiles(DownloadDropBoxViewModel model)
+        {
+            var zipName = $"archive-EvidenceFiles-{DateTime.Now.ToString("yyyy_MM_dd-HH_mm_ss")}.zip";
+           var ListData =await _downloadDropBoxService.ReturnFileByteListData(model.dropboxFolderPath);
+            using (MemoryStream ms = new MemoryStream())
+            {
+                using (var archive = new ZipArchive(ms, ZipArchiveMode.Create, true))
+                {
+                    foreach (var data in ListData)
+                    {
+                        string fPath = Encoding.ASCII.GetString(data.ByteArray);
+                        //var entry = archive.CreateEntry(System.IO.Path.GetFileName(fPath), CompressionLevel.Fastest);
+                        var entry = archive.CreateEntry(data.FileName, CompressionLevel.Fastest);
+                        using (var zipStream = entry.Open())
+                        {
+                            //var bytes = System.IO.File.ReadAllBytes(fPath);
+                            //zipStream.Write(bytes, 0, bytes.Length);
+                            zipStream.Write(data.ByteArray, 0, data.ByteArray.Length);
+                        }
+                    }
+                }
+                return File(ms.ToArray(), "application/zip", zipName);
+            }
+        }
+
+
+
 
 
         private static readonly Dictionary<string, string> MIMETypesDictionary = new Dictionary<string, string>
