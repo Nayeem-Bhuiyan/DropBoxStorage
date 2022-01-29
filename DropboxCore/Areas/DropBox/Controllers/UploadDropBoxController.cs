@@ -1,4 +1,5 @@
-﻿using DropboxCore.Areas.DropBox.Models;
+﻿using Dropbox.Api.Files;
+using DropboxCore.Areas.DropBox.Models;
 using DropboxCore.Service;
 using DropboxCore.Service.Interface;
 using Microsoft.AspNetCore.Hosting;
@@ -47,6 +48,10 @@ namespace DropboxCore.Areas.DropBox.Controllers
             
             try
             {
+
+              
+
+
                 foreach (var file in model.files)
                 {
 
@@ -61,14 +66,28 @@ namespace DropboxCore.Areas.DropBox.Controllers
 
                     if (file.Length > 0)
                     {
+
+
                         using (var fileStream = System.IO.File.Create(FullPath))
                         {
                             await file.CopyToAsync(fileStream);
+
                         }
+
+                        Stream stream = new FileStream(FullPath, FileMode.Open, FileAccess.Read);
+
+                        if (file.Length < 146800640)
+                        {
+                            await _uploadService.UploadToDropBoxAsync2(@"/Upload-22-01-2022",FullPath, fileName);
+                        }
+                        else
+                        {
+                            await _uploadService.UploadToDropBoxAsync("Upload-22-01-2022", fileName, FullPath);
+                        }
+
+
                     }
-
-                    await _uploadService.UploadToDropBoxAsync("Upload-22-01-2022", fileName, FullPath);
-
+          
                 }
                 model.responseMessage = "success";
             }
@@ -82,7 +101,13 @@ namespace DropboxCore.Areas.DropBox.Controllers
             return Json(model);
         }
 
-
+        public static Byte[] ToByteArray(Stream stream)
+        {
+            Int32 length = stream.Length > Int32.MaxValue ? Int32.MaxValue : Convert.ToInt32(stream.Length);
+            Byte[] buffer = new Byte[length];
+            stream.Read(buffer, 0, length);
+            return buffer;
+        }
 
         public IActionResult UploadChunkFile()
         {
