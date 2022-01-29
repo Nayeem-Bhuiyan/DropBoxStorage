@@ -169,7 +169,6 @@ namespace DropboxCore.Areas.DropBox.Controllers
                     foreach (var data in ListData)
                     {
                         string fPath = Encoding.ASCII.GetString(data.ByteArray);
-                        //var entry = archive.CreateEntry(System.IO.Path.GetFileName(fPath), CompressionLevel.Fastest);
                         var entry = archive.CreateEntry(data.FileName, CompressionLevel.Fastest);
                         using (var zipStream = entry.Open())
                         {
