@@ -67,7 +67,7 @@ namespace DropboxCore.Areas.DropBox.Controllers
 
                         if (file.Length < 134000000)
                         {
-                            await _uploadService.UploadToDropBoxAsync2(@"/Upload-22-01-2022",FullPath, fileName);
+                            await _uploadService.UploadToDropboxSmallFileSystem(@"/Upload-22-01-2022",FullPath, fileName);
                             //await _uploadService.UploadToDropBoxSmallFile(FullPath, "/" + "Upload-22-01-2022" + "/"+fileName);
                         }
                         else
