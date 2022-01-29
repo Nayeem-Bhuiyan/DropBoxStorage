@@ -57,6 +57,7 @@ namespace DropboxCore.Areas.DropBox.Controllers
 
                     string fileName = Path.GetFileName(file.FileName);
                     string FullPath = Path.Combine(_environment.WebRootPath, "Upload", fileName);
+                    string DropBoxUploadPath = "/" + "Upload-22-01-2022" + "/" + fileName;
                     if (file.Length > 0)
                     {
                         var inputStream = file.OpenReadStream();
@@ -65,17 +66,17 @@ namespace DropboxCore.Areas.DropBox.Controllers
                             inputStream.CopyTo(fileStream);
                         }
 
-                        if (file.Length < 134000000)
-                        {
-                            await _uploadService.UploadToDropboxSmallFileSystem(@"/Upload-22-01-2022",FullPath, fileName);
-                            //await _uploadService.UploadToDropBoxSmallFile(FullPath, "/" + "Upload-22-01-2022" + "/"+fileName);
-                        }
-                        else
-                        {
-                            await _uploadService.LargeFileUpload("Upload-22-01-2022", fileName, FullPath);
-                        }
+                        //if (file.Length < 134000000)
+                        //{
+                        //    await _uploadService.UploadToDropboxSmallFileSystem(@"/Upload-22-01-2022",FullPath, fileName);
+                        //    //await _uploadService.UploadToDropBoxSmallFile(FullPath, "/" + "Upload-22-01-2022" + "/"+fileName);
+                        //}
+                        //else
+                        //{
+                        //    await _uploadService.LargeFileUpload("Upload-22-01-2022", fileName, FullPath);
+                        //}
 
-
+                        await _uploadService.Upload(FullPath,DropBoxUploadPath);
                     }
           
                 }
